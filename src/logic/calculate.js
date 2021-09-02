@@ -1,8 +1,5 @@
 import Big from "big.js";
 
-import operate from "./operate";
-import isNumber from "./isNumber";
-
 /**
  * Given a button name and a calculator data object, return an updated
  * calculator data object.
@@ -13,6 +10,34 @@ import isNumber from "./isNumber";
  *   operation:String  +, -, etc.
  */
 export default function calculate(obj, buttonName) {
+  function findNumber(item) {
+    return /[0-9]+/.test(item);
+  }
+  function operate(numberOne, numberTwo, operation) {
+    const one = Big(numberOne || "0");
+    const two = Big(
+      numberTwo || (operation === "÷" || operation === "x" ? "1" : "0"),
+    ); //If dividing or multiplying, then 1 maintains current value in cases of null
+    if (operation === "+") {
+      return one.plus(two).toString();
+    }
+    if (operation === "-") {
+      return one.minus(two).toString();
+    }
+    if (operation === "x") {
+      return one.times(two).toString();
+    }
+    if (operation === "÷") {
+      if (two === "0") {
+        alert("Divide by 0 error");
+        return "0";
+      } else {
+        return one.div(two).toString();
+      }
+    }
+    throw Error(`Unknown operation '${operation}'`);
+  }
+
   if (buttonName === "AC") {
     return {
       total: null,
@@ -21,10 +46,13 @@ export default function calculate(obj, buttonName) {
     };
   }
 
-  if (isNumber(buttonName)) {
-    if (buttonName === "0" && obj.next === "0") {
-      return {};
+  if (findNumber(buttonName)) {
+    if (buttonName === "0") {
+      if (obj.next === "0") {
+        return {};
+      }
     }
+
     // If there is an operation, update next
     if (obj.operation) {
       if (obj.next) {
