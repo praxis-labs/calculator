@@ -14,7 +14,8 @@ export default function calculate(obj, buttonName) {
     return /[0-9]+/.test(item);
   }
   function operate(numberOne, numberTwo, operation) {
-    const one = Big(numberOne || "0");
+    const defaultNumber = numberOne || "0";
+    const one = Big(defaultNumber);
     const two = Big(
       numberTwo || (operation === "÷" || operation === "x" ? "1" : "0"),
     ); //If dividing or multiplying, then 1 maintains current value in cases of null
