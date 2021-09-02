@@ -1,49 +1,85 @@
-import Button from "./Button";
 import React from "react";
 import PropTypes from "prop-types";
+import "./Button.css";
 
 import "./ButtonPanel.css";
 
 export default class ButtonPanel extends React.Component {
   static propTypes = {
     clickHandler: PropTypes.func,
+    name: PropTypes.string,
+    title: PropTypes.string
   };
+
+  state = {
+    currName: "",
+    value: null,
+    nextValue: null
+  };
+
+  constructor(props) {
+    super(props);
+    this.handleButtonClick = this.handleButtonClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({ currTitle: this.props.title });
+  }
+
+  handleButtonClick() {
+    this.props.clickHandler(this.props.name);
+  }
 
   handleClick = buttonName => {
     this.props.clickHandler(buttonName);
   };
 
+  renderButton = (name, { orange, wide }) => {
+    const className = [
+      "component-button",
+      orange ? "orange" : "",
+      wide ? "wide" : "",
+    ];
+    return (
+      <div className={className.join(" ").trim()}>
+        <button onClick={() => this.handleClick(name)}>{name}</button>
+      </div>
+    );
+  };
+
   render() {
+    const { currTitle } = this.state;
     return (
       <div className="component-button-panel">
+        {currTitle}
         <div>
-          <Button name="AC" clickHandler={this.handleClick} />
-          <Button name="+/-" clickHandler={this.handleClick} />
-          <Button name="%" clickHandler={this.handleClick} />
-          <Button name="÷" clickHandler={this.handleClick} orange />
+          {this.renderButton("AC", {})}
+          {this.renderButton("+/-", {})}
+          {this.renderButton("%", {})}
+          {this.renderButton("÷", { orange: true })}
         </div>
         <div>
-          <Button name="7" clickHandler={this.handleClick} />
-          <Button name="8" clickHandler={this.handleClick} />
-          <Button name="9" clickHandler={this.handleClick} />
-          <Button name="x" clickHandler={this.handleClick} orange />
+          {this.renderButton("7", {})}
+          {this.renderButton("8", {})}
+          {this.renderButton("9", {})}
+          {this.renderButton("x", { orange: true })}
         </div>
         <div>
-          <Button name="4" clickHandler={this.handleClick} />
-          <Button name="5" clickHandler={this.handleClick} />
-          <Button name="6" clickHandler={this.handleClick} />
-          <Button name="-" clickHandler={this.handleClick} orange />
+          {this.renderButton("4", {})}
+          {this.renderButton("5", {})}
+          {this.renderButton("6", {})}
+          {this.renderButton("-", { orange: true })}
         </div>
         <div>
-          <Button name="1" clickHandler={this.handleClick} />
-          <Button name="2" clickHandler={this.handleClick} />
-          <Button name="3" clickHandler={this.handleClick} />
-          <Button name="+" clickHandler={this.handleClick} orange />
+          {this.renderButton("1", {})}
+          {this.renderButton("2", {})}
+          {this.renderButton("3", {})}
+          {this.renderButton("+", { orange: true })}
         </div>
         <div>
-          <Button name="0" clickHandler={this.handleClick} wide />
-          <Button name="." clickHandler={this.handleClick} />
-          <Button name="=" clickHandler={this.handleClick} orange />
+          {this.renderButton("0", { wide: true })}
+          {this.renderButton(".", {})}
+          {this.renderButton("=", { orange: true })}
         </div>
       </div>
     );
