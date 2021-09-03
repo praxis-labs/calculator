@@ -35,13 +35,18 @@ export default class ButtonPanel extends React.Component {
   };
 
   renderButton = (name, { orange, wide }) => {
-    const className = [
-      "component-button",
-      orange ? "orange" : "",
-      wide ? "wide" : "",
-    ];
+   let className="component-button"
+    if(this.props.orange) {
+      className += " ";
+      className += "orange"
+    }
+    if(this.props.wide) {
+      className += " ";
+      className += "wide"
+    }
+
     return (
-      <div className={className.join(" ").trim()}>
+      <div className={className}>
         <button onClick={() => this.handleClick(name)}>{name}</button>
       </div>
     );
